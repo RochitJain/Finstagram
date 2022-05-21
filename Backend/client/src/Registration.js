@@ -9,10 +9,7 @@ function Registration() {
     e.preventDefault();
     if (regdata.email || regdata.password || regdata.name) {
       try {
-        const response = await axios.post(
-          `${process.env.API_URL}/register`,
-          regdata
-        );
+        const response = await axios.post(`/register`, regdata);
         if (response.data.status === 201) {
           alert(response.data.message);
           nav("/");
