@@ -1,7 +1,11 @@
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/node-file-upl", {
+const url =
+  "mongodb+srv://mongoDataBase:qwerty123@cluster0.b2v94.mongodb.net/?retryWrites=true&w=majority";
+const connectionParams = {
   useNewUrlParser: true,
-});
+  useUnifiedTopology: true,
+};
+mongoose.connect(url, connectionParams);
 var conn = mongoose.connection;
 conn.on("connected", function () {
   console.log("database is connected successfully");
