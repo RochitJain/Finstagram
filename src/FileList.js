@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-function FileList(props) {
-  const [files, getFiles] = useState(props.state);
+function FileList({ state }) {
+  const [files, getFiles] = useState(state);
   const nav = useNavigate();
   const deleteHandler = async (id) => {
     const response = await axios({

@@ -22,18 +22,16 @@ function ShortUrl() {
       type: "image/jpeg",
     });
     //Build a URL from the file
-    const fileURL = URL.createObjectURL(file);
-    getData(fileURL);
-    //Open the URL on new Window
-    // ?    // console.log(response.data.result);
-    // getData(response.data.result.data);
+    //const fileURL = URL.createObjectURL(file);
+    getData(response.data);
+    console.log(response.data);
   };
-  // const img = new Buffer.from(data).toString("base64");
-  //return <div>{valid && img}</div>;
+
+  const src = `data:image/png;base64 ${data}`;
   return (
     <div>
       {" "}
-      <img src={data} />
+      <img className="blob-to-image" src={src}></img>
     </div>
   );
 }

@@ -1,15 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import FileList from "./FileList";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function Documents() {
+function Dashboard() {
   const [isValid, setIsValid] = useState("false");
   const [details, setDetails] = useState({});
   const [file, setFileDetails] = useState({});
   const [allFiles, getFiles] = useState();
   const inputRef = React.useRef();
   const location = useLocation();
+  const nav = useNavigate();
 
   const uploadFile = async (e) => {
     e.preventDefault();
@@ -19,7 +20,6 @@ function Documents() {
     formData.append("filename", details.title);
     formData.append("filedesc", details.desc);
     formData.append("email", location.state);
-    console.log(file);
     try {
       const response = await axios({
         method: "POST",
@@ -27,14 +27,11 @@ function Documents() {
         data: formData,
         headers: { token: localStorage.getItem("token") },
       });
-      console.log(response);
-      if (response.status == 200) {
+      if (response.status === 200) {
         alert(response.data.message);
         setIsValid(false);
         setDetails({ title: "", desc: "" });
         inputRef.current.value = "";
-        //window.location.reload();
-        // result();
       } else alert(response);
     } catch (err) {
       console.log(err);
@@ -44,10 +41,9 @@ function Documents() {
     try {
       const response = await axios({
         method: "GET",
-        url: "http://localhost:3001/files",
+        url: `http://localhost:3001/files/${location.state}`,
         headers: { token: localStorage.getItem("token") },
       });
-      console.log(response.data.files);
       getFiles(response.data.files);
     } catch (e) {
       console.log(e);
@@ -55,7 +51,11 @@ function Documents() {
   };
 
   useEffect(() => {
-    result();
+    if (localStorage.getItem("token")) result();
+    else {
+      alert("User not logged in");
+      nav("/");
+    }
   }, [inputRef]);
 
   const uploadDetails = (e) => {
@@ -66,12 +66,27 @@ function Documents() {
   };
   const uploadDoc = (e) => {
     setIsValid(true);
-    console.log("fileData", e.target.files[0]);
     setFileDetails(e.target.files[0]);
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    nav("/");
   };
   return (
     <div className="container mt-4">
-      <form className="row mt-3" onSubmit={(e) => uploadFile(e)}>
+      <button
+        style={{ float: "right" }}
+        className="btn btn-danger"
+        onClick={logoutHandler}
+      >
+        Logout
+      </button>
+      <form
+        className="row mt-3"
+        style={{ float: "center" }}
+        onSubmit={(e) => uploadFile(e)}
+      >
         <label className="form-label row g-6">File Upload</label>
         <div className="col-sm-9 ">
           <input
@@ -114,4 +129,4 @@ function Documents() {
   );
 }
 
-export default Documents;
+export default Dashboard;

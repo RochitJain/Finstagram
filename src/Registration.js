@@ -1,19 +1,25 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function Registration() {
   const [regdata, setRegData] = useState({});
+  const nav = useNavigate();
   const RegistrationForm = async (e) => {
     e.preventDefault();
     try {
-      //  console.log(regdata);
       const response = await axios.post(
         `http://localhost:3001/register`,
         regdata
       );
-      console.log(response.status);
+      if (response.data.status === 201) {
+        alert(response.data.message);
+        nav("/");
+      } else {
+        alert(response.data.message);
+      }
     } catch (e) {
-      console.log(e.message);
+      console.log(e);
     }
   };
   const handleChange = (e) => {
@@ -26,7 +32,6 @@ function Registration() {
   return (
     <div className="container">
       <h1>Registration</h1>
-      <h1></h1>
       <div className="d-grid gap-3">
         <form className="row mt-3" onSubmit={RegistrationForm}>
           <div className="row justify-content-start">
@@ -40,7 +45,7 @@ function Registration() {
                 id="inputName"
                 placeholder="Name"
                 onChange={handleChange}
-                value={regdata.email}
+                value={regdata.name}
               />
             </div>
             <div className="col-sm-6">
@@ -69,11 +74,14 @@ function Registration() {
               />
             </div>
 
-            <div className="row">
+            <div className="row mt-4">
               <div className="col align-self-start">
                 <button type="submit" className="btn btn-primary">
                   Sign Up
                 </button>
+                <Link to={"/"}>
+                  <button className="btn btn-info mx-4">Login</button>
+                </Link>
               </div>
             </div>
           </div>

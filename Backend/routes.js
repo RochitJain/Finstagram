@@ -6,19 +6,17 @@ const auth = require("./auth");
 
 const File = require("./files");
 
-const upload = multer();
+const upload = multer({});
 route.post("/upload", auth, upload.single("file"), async (req, res) => {
   const file = new File(req.file);
-  // console.log(file);
-  // file.file = await req.file.buffer;
-  // file.title = await req.body.filename;
-  // file.desc = await req.body.filedesc;
-  // file.name = await req.file.originalname;
-  // file.type = await req.file.mimetype;
-  // file.email = await req.body.email;
-  // //console.log(file);
-  // await file.save();
-  res.send({ message: req.file }).status(200);
+  file.file = await req.file.buffer;
+  file.title = await req.body.filename;
+  file.desc = await req.body.filedesc;
+  file.name = await req.file.originalname;
+  file.type = await req.file.mimetype;
+  file.email = await req.body.email;
+  await file.save();
+  res.send({ file: req.file, message: " File Uploaded" }).status(200);
 });
 
 route.post("/login", async (req, res) => {
@@ -39,7 +37,6 @@ route.post("/login", async (req, res) => {
 });
 
 route.delete("/delete/:id", auth, async (req, res) => {
-  console.log(req.params.id);
   try {
     const result = await File.findById(req.params.id);
     await result.remove();
@@ -49,14 +46,13 @@ route.delete("/delete/:id", auth, async (req, res) => {
       await res.send({ message: "Record not found", status: 400 }).status(400);
     }
   } catch (e) {
-    res.send({ message: e }).status(404);
+    res.send({ message: e, status: 404 }).status(404);
   }
 });
 
-route.get("/files", auth, async (req, res) => {
+route.get("/files/:id", auth, async (req, res) => {
   try {
-    //console.log("hi");
-    const filesList = await File.find();
+    const filesList = await File.find({ email: req.params.id });
     res.send({ message: "SEND", files: filesList }).status(200);
   } catch (e) {
     console.log(e);
@@ -68,9 +64,9 @@ route.post("/register", async (req, res) => {
   try {
     const user = new User(req.body);
     await user.save();
-    res.send({ message: "User saved" }).status(201);
+    res.send({ message: "User saved", status: 201 }).status(201);
   } catch (e) {
-    res.send({ message: "Not Registered" }).status(400);
+    res.send({ message: "Not Registered", status: 400 }).status(400);
   }
 });
 
