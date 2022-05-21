@@ -7,21 +7,25 @@ export default function AdminLogin() {
   const history = useNavigate();
   const sendDataHandler = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios({
-        method: "POST",
-        url: "http://localhost:3001/login",
-        headers: {
-          "Access-Control-Allow-Origin": true,
-        },
-        data,
-      });
-      if (response.data.auth) {
-        localStorage.setItem("token", response.data.token);
-        history("/login/user", { state: data.email });
+    if (data.email || data.password) {
+      try {
+        const response = await axios({
+          method: "POST",
+          url: "http://localhost:3001/login",
+          headers: {
+            "Access-Control-Allow-Origin": true,
+          },
+          data,
+        });
+        if (response.data.auth) {
+          localStorage.setItem("token", response.data.token);
+          history("/login/user", { state: data.email });
+        }
+      } catch (e) {
+        console.log(e.message);
       }
-    } catch (e) {
-      console.log(e.message);
+    } else {
+      window.alert("All fields are compulsory");
     }
   };
 

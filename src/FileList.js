@@ -1,10 +1,9 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 function FileList({ state }) {
   const [files, getFiles] = useState(state);
-  const nav = useNavigate();
   const deleteHandler = async (id) => {
     const response = await axios({
       method: "DELETE",
@@ -13,11 +12,6 @@ function FileList({ state }) {
     });
     alert(response.data.message);
     window.location.reload();
-  };
-
-  const shareUrlHandler = async (id) => {
-    //nav(`http://localhost:3000/abc/${id}`);
-    //alert(url);
   };
 
   return (

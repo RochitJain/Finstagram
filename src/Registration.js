@@ -7,20 +7,22 @@ function Registration() {
   const nav = useNavigate();
   const RegistrationForm = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:3001/register`,
-        regdata
-      );
-      if (response.data.status === 201) {
-        alert(response.data.message);
-        nav("/");
-      } else {
-        alert(response.data.message);
+    if (regdata.email || regdata.password || regdata.name) {
+      try {
+        const response = await axios.post(
+          `http://localhost:3001/register`,
+          regdata
+        );
+        if (response.data.status === 201) {
+          alert(response.data.message);
+          nav("/");
+        } else {
+          alert(response.data.message);
+        }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
+    } else window.alert("All fields are compulsory");
   };
   const handleChange = (e) => {
     setRegData((prevState) => ({

@@ -4,7 +4,8 @@ import FileList from "./FileList";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Dashboard() {
-  const [isValid, setIsValid] = useState("false");
+  const [valid, setIsValid] = useState("false");
+  const [loggedStatus, isLogged] = useState("false");
   const [details, setDetails] = useState({});
   const [file, setFileDetails] = useState({});
   const [allFiles, getFiles] = useState();
@@ -51,8 +52,10 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) result();
-    else {
+    if (localStorage.getItem("token")) {
+      isLogged(true);
+      result();
+    } else {
       alert("User not logged in");
       nav("/");
     }
@@ -96,7 +99,7 @@ function Dashboard() {
             onChange={uploadDoc}
           />
         </div>
-        {isValid === true && (
+        {valid && (
           <div className="row mt-4">
             <div className="col-sm-6">
               <input
