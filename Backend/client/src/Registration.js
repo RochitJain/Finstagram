@@ -10,7 +10,7 @@ function Registration() {
     if (regdata.email || regdata.password || regdata.name) {
       try {
         const response = await axios.post(
-          `http://localhost:3001/register`,
+          `${process.env.API_URL}/register`,
           regdata
         );
         if (response.data.status === 201) {
