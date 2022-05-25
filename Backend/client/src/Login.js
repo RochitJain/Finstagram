@@ -11,7 +11,7 @@ export default function AdminLogin() {
       try {
         const response = await axios({
           method: "POST",
-          url: "http://localhost:3001/login",
+          url: "/login",
           headers: {
             "Access-Control-Allow-Origin": true,
           },
