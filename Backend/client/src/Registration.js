@@ -9,7 +9,12 @@ function Registration() {
     e.preventDefault();
     if (regdata.email || regdata.password || regdata.name) {
       try {
-        const response = await axios.post(`/register`, regdata);
+        const response = await axios({
+          method: "POST",
+          url: "https://mern-stack-app-deploy.herokuapp.com/register",
+          data: regdata,
+        });
+
         if (response.data.status === 201) {
           alert(response.data.message);
           nav("/");
